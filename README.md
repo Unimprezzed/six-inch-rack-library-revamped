@@ -4,12 +4,17 @@ Introduction:
   
   That's when I ran into some issues that made me decide to write this library. 
 
-  1. I felt the original library relied too much on undocumented "magic numbers" that would break the entire design if you changed them. 
+ 	 1. I felt the original library relied too much on undocumented "magic numbers" that would break the entire design if you changed them. 
+
 	2. KronBjorn swapped the Y and Z axes. This is something that irked me, since I'm used to the Z axis being "up" and "down" and Y axis being "forward" and "back" (from the perspective of the viewport). It also made printing the cabinet in the position it was generated difficult in materials like ABS, since the layers would delaminate, even inside an enclosure. 
-	3. The library was lacking a few things I would have found useful, like having small internal tabs for holding items already in an enclosure (like network switches and USB hubs) in place. 
-	4. While the author gave you plenty of room to place and move screws around, I found that it was unnecessary for most things, as having more screws securing the cabinet together did not signficantly improve the strength of these connections. 
-	5. This is more of a "stupid user" moment on my end, but I could never figure out how to place add cutouts on the front and rear panels. 
-	6. It renders a little slower than I'd like, even in the nightly builds of OpenSCAD with multicore rendering. 
+	
+ 	3. The library was lacking a few things I would have found useful, like having small internal tabs for holding items already in an enclosure (like network switches and USB hubs) in place. 
+	
+ 	4. While the author gave you plenty of room to place and move screws around, I found that it was unnecessary for most things, as having more screws securing the cabinet together did not signficantly improve the strength of these connections. 
+	
+ 	5. This is more of a "stupid user" moment on my end, but I could never figure out how to place add cutouts on the front and rear panels. 
+	
+ 	6. It renders a little slower than I'd like, even in the nightly builds of OpenSCAD with multicore rendering. 
 
   Now, for my changes. "+" means I added something or made something I consider an improvement. "-" means I simplified or removed a feature I didn't find particularly useful 
 		+ The smallest change was the extension of the vents (named "chimneys" in the original library) so that they scale in size to the depth of the cabinet.
