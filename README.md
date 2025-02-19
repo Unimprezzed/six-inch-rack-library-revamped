@@ -1,32 +1,25 @@
 Introduction: 
-	This OpenSCAD design is meant to be compatible with KronBjorn's Customizable 6" Rack Enclosure. 
-	Since I wanted to make a somewhat serious-looking Raspberry Pi cluster that was expandable, I liked this library enough to download it and use it. 
-  
-  That's when I ran into some issues that made me decide to write this library. 
 
- 	 1. I felt the original library relied too much on undocumented "magic numbers" that would break the entire design if you changed them. 
+This OpenSCAD design is meant to be (mostly) compatible with KronBjorn's Customizable 6" Rack Enclosure (https://github.com/KronBjorn/SixInchRack)
 
-	2. KronBjorn swapped the Y and Z axes. This is something that irked me, since I'm used to the Z axis being "up" and "down" and Y axis being "forward" and "back" (from the perspective of the viewport). It also made printing the cabinet in the position it was generated difficult in materials like ABS, since the layers would delaminate, even inside an enclosure. 
-	
- 	3. The library was lacking a few things I would have found useful, like having small internal tabs for holding items already in an enclosure (like network switches and USB hubs) in place. 
-	
- 	4. While the author gave you plenty of room to place and move screws around, I found that it was unnecessary for most things, as having more screws securing the cabinet together did not signficantly improve the strength of these connections. 
-	
- 	5. This is more of a "stupid user" moment on my end, but I could never figure out how to place add cutouts on the front and rear panels. 
-	
- 	6. It renders a little slower than I'd like, even in the nightly builds of OpenSCAD with multicore rendering. 
+I found it on Thingiverse a while ago, and I liked it enough to use it for a Raspberry Pi Cluster I wanted to build. When I tried working with it, however, is when the problems started to mount. The original libary was written for an older version of OpenSCAD, which is perfectly fine. What *wasn't* as easy to work around were some other "eccentricites" of the library. 
 
-  Now, for my changes. "+" means I added something or made something I consider an improvement. "-" means I simplified or removed a feature I didn't find particularly useful 
-		+ The smallest change was the extension of the vents (named "chimneys" in the original library) so that they scale in size to the depth of the cabinet.
-		+ I redesigned the cabinet code in a way that it can be printed as generated without needing to add supports. I did this with thicker screw traps for the lid that reach down to the floor of the cabinet and extending the lip the lid rests on downward, which reduces the number of overhangs and strengthens the walls. These extensions have a small footprint, so the internal volume of the cabinet is not significantly affected.
-		+ I made the rules for placing things like standoffs or internal brackets internally consistent. All additions are placed relative to the front left inside corner of the cabinet. 
-			+ This includes: 
-				+ Standoffs
-				+ Internal brackets
-				+ Square and round cutouts on the front and rear panels
-			+ Standoffs now have a small round base to bridge the gap across the newly extended vents. 
-		- I simplified the screw placement logic for the lid, front, and rear panels. 
-			-There are now only four screws holding the lid and the front and rear panels onto the cabinet. I might add the ability to automatically place more 
-			-In line with the new placement code, screws for the front and rear panels are placed are placed with respect to the front left inside corner of the cabinet, except it is mirrored to where it's on the right side of the cabinet as well.
+* The original library relies heavily on poorly-documented "magic numbers" that aren't immediately obvious what they do.
+* The original library swaps the Y and Z axes. This was a little disorienting, since I'm used to the Z axis being "up" and "down," with the Y axis being "forward" and "back". It also results in a print orientation that was challenging to print, since trying to print the design in ABS resulted the layers delaminating.
+* The original library was missing a few features that I would have found useful, like the abilty to create "brackets" that hold enclosed objects in place.
+* The original library gave a lot more control over where screws can go than it probably should have.
+* I had a hard time figuring out where to place square and round holes on the front and rear panels. 
 
-	
+I'm not about to demand that the original author come back from the life he's living and support a library he wrote for a small project he wrote in 2016 to meet my particular tastes, and I didn't want to make a PR for a change that radically redefines how the library works and will probably be ignored anyway. To that end, I wrote a modified version of the library to meet my needs, and after wrapping up the project to where I'm happy, I decided to share my work with the rest of the world. Feel free to use and modify it to your own ends. You can even write a multi-paragraph README.md in your fork that tells me how much of an idiot I am. My feelings won't be hurt. (づ￣ 3￣)づ
+
+Here's the features of this library: 
+* The axes now follow the right-hand rule.
+* The base cabinets have been redesigned so that they can be printed without supports. This was accomplished with screw traps that reach down to the floor of the cabinet and extending the lip rest downward. 
+* The placement for square cutouts, round cutouts, internal brackets, and standoffs is relative to the inside left forward corner of the cabinet.
+* Vents have been extended to scale with the length of the cabinet for improved airflow. Standoffs have additional code that allows them to bridge the gap across these vents.
+* Speaking of standoffs, I've included an option that allows you to thread a counter-sunk screw on the bottom of the cabinet through the standoff. This is something I found particularly useful when I needed to secrue a spacer in place for a HAT. 
+* Screw placement logic has been greatly simplified. Four screws hold the lid on the cabinet, four screws hold on the front panel, and four screws hold the rear panel in place. This is the rule, no matter how much you increase the height and depth of the cabinet. 
+* Screws for the front and rear panels are placed with respect of the left-most corner of the cabinet and mirrored to the other side of the cabinet, ensuring that no matter what you do, the holes for the panels will always line up with the cabinet.
+
+Examples of use: 
+I've included the Raspberry Pi 4 cabinet and NanoPi R5C cabinet that I've made to provide you some idea as to how to use this library. 
