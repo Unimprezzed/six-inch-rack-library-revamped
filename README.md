@@ -21,9 +21,9 @@ Here's the features of this library:
 
 Parts included in this repo: 
 * Cabinets: Built for small, self-contained electronics. Consists of the cabinet itself, a front and rear panel, and a lid. Front and rear panels can have square and round cutouts, cabinet can support brackets and standoffs. 
-* Enclosures: Multi-part containers that are built to house larger, more complex electronics. Consists of front, rear, top, bottom, left, and right panels. All panels support square and round cutouts, and standoffs and brackets. Supports internal divisions called "levels." 
-* Drawers: A single or multi-level container that is built to support drawers that slide on rails. Can be used to hold screws and stuff. Not sure *why* you would want to make this, but the option is there. 
-* Rack: The rack is what this entire "ecosystem" is built around. Can be used to generate 3D-printed profiles with nutless traps built-in, or nutless traps that slide into aluminum 2020 extrusions.
+* (Not implemented yet) Enclosures: Multi-part containers that are built to house larger, more complex electronics. Consists of front, rear, top, bottom, left, and right panels. All panels support square and round cutouts, and standoffs and brackets. Supports internal divisions called "levels." 
+* (Not implemented yet) Drawers: A single or multi-level container that is built to support drawers that slide on rails. Can be used to hold screws and stuff. Not sure *why* you would want to make this, but the option is there. 
+* (Not implemented yet) Rack: The rack is what this entire "ecosystem" is built around. Can be used to generate 3D-printed profiles with nutless traps built-in, or nutless traps that slide into aluminum 2020 extrusions.
 
 Extras: 
 * I wanted to add some extra flair for the cabinets for my Pi4 cluster, so I made a OpenSCAD design that makes cutouts for the cabinets that makes them multi-material. 
