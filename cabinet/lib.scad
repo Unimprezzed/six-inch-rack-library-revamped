@@ -65,7 +65,7 @@ module cabinet(cabinet_dim=[0,0,0],brackets=[],standoffs=[]){
 						//The vents on the bottom of the cabinet
                         translate(ic[4]+[0,-WALL_THICKNESS-TOL,0])cube([cabinet_dim.x-2*WALL_THICKNESS,10,cabinet_dim.z]);                 
                         translate(ic[12]+[0,0,-WALL_THICKNESS])cube([cabinet_dim.x-2*WALL_THICKNESS,cabinet_dim.y, WALL_THICKNESS+TOL]);
-						vents(cabinet_dim.y);
+						cabinet_vents(cabinet_dim.y);
 					};
 					difference(){
 						union(){
@@ -280,7 +280,7 @@ module lid(cabinet_dim=[0,0,0]){
                 dist = dist3D(screw_trap_pos[2],screw_trap_pos[3]);
                 translate(screw_trap_pos[2] + [0,0,-WALL_THICKNESS])cube([dist,WALL_THICKNESS,WALL_THICKNESS]);
             }
-            vents(cabinet_dim.y);
+            cabinet_vents(cabinet_dim.y);
             translate(ic[4]+[0,-WALL_THICKNESS-TOL,-2*WALL_THICKNESS])cube([cabinet_dim.x-2*WALL_THICKNESS,10,cabinet_dim.z]);
             translate(screw_trap_pos[0] + [0,0,-SCREW_TRAP_OUTER_DIAMETER*0.2])rotate([270,0,0])cylinder(d=M3_SCREW_THREAD-TOL, h=cabinet_dim.y);
             translate(screw_trap_pos[1] + [0,0,-SCREW_TRAP_OUTER_DIAMETER*0.2])rotate([270,0,0])cylinder(d=M3_SCREW_THREAD-TOL, h=cabinet_dim.y);

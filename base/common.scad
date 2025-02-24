@@ -1,7 +1,9 @@
 include <constants.scad>
 $fn=40;
 function u2mm(u) = U*u;
-module vents(depth) {
+function mm2u(mm) = mm/U;
+
+module cabinet_vents(depth) {
 	for(i=[0:8:80]){
         translate([(CABINET_WIDTH - 80)/2 + i, 20 ,-50]){
             minkowski(){
@@ -11,6 +13,17 @@ module vents(depth) {
         }
     }
 }
+module rack_vents(depth){
+    for(i=[0:8:120]){
+        translate([(CABINET_WIDTH - 80)/2 + i, 20 ,-50]){
+            minkowski(){
+                cube([0.01, depth-40, 200]);
+                sphere(d=2);
+            }
+        }
+    }
+}
+
 function dist3D(p1,p2) = sqrt(pow(p1.x - p2.x, 2)+pow(p1.y-p2.y,2)+pow(p1.z-p2.z,2));
 module m3_cs_screw(){
 	union(){
@@ -53,3 +66,26 @@ module standoff(od,id,h){
 module standoff_thru_screw(od,id){
     cylinder(h=WALL_THICKNESS, d1=od, d2=id);
 }  
+module grid(){
+    width=SIX_INCH-1;
+    
+    intersection(){
+        union(){
+            sz=8;
+            grid = 15;
+            for(i=[-grid*8:12:grid*8]){        
+                translate([sz/2+i+70,sz/2+78,PANEL_THICKNESS/2]){
+                    rotate([0,0,45]){
+                    cube([2,width*1.5,PANEL_THICKNESS],center=true);        
+                    }
+                }
+                translate([sz/2+i+70,sz/2+82,PANEL_THICKNESS/2]){
+                    rotate([0,0,-45]){
+                        cube([2,width*1.5,PANEL_THICKNESS],center=true);        
+                    }
+                }
+            }
+        }
+        translate([15,15,-1]){cube([125,125,10]);}
+    }
+}
