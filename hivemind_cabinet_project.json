@@ -1,0 +1,190 @@
+[
+{
+    "name": "pi4-cabinet",
+    "scad": "hivemind_cabinet/multi_material_cabinet.scad",
+    "parts": {
+        "cabinet_0": {
+            "ext": "stl",
+            "part_id": 0,
+            "args":{}
+        },
+        "cabinet_1": {
+            "ext": "stl",
+            "part_id": 1,
+            "args":{}
+        },
+        "lid_0": {
+            "ext": "stl",
+            "part_id": 2,
+            "args":{}
+        },
+        "lid_1": {
+            "ext": "stl",
+            "part_id": 3,
+            "args":{}
+        },
+        "front_0": {
+            "ext": "stl",
+            "part_id": 4,
+            "args":{}
+        },
+        "front_1": {
+            "ext": "stl",
+            "part_id": 5,
+            "args":{}
+        },
+        "rear_0": {
+            "ext": "stl",
+            "part_id": 6,
+            "args":{}
+        },
+        "rear_1": {
+            "ext": "stl",
+            "part_id": 7,
+            "args":{}
+        }
+    },
+    "global_args": {}
+},
+{
+    "name": "disk-cabinet",
+    "scad": "hivemind_disk/multi_material_cabinet.scad",
+    "parts": {
+        "cabinet_0": {
+            "ext": "stl",
+            "part_id": 0,
+            "args":{}
+        },
+        "cabinet_1": {
+            "ext": "stl",
+            "part_id": 1,
+            "args":{}
+        },
+        "lid_0": {
+            "ext": "stl",
+            "part_id": 2,
+            "args":{}
+        },
+        "lid_1": {
+            "ext": "stl",
+            "part_id": 3,
+            "args":{}
+        },
+        "front_0": {
+            "ext": "stl",
+            "part_id": 4,
+            "args":{}
+        },
+        "front_1": {
+            "ext": "stl",
+            "part_id": 5,
+            "args":{}
+        },
+        "rear_0": {
+            "ext": "stl",
+            "part_id": 6,
+            "args":{}
+        },
+        "rear_1": {
+            "ext": "stl",
+            "part_id": 7,
+            "args":{}
+        }
+    },
+    "global_args": {}
+},
+{
+    "name": "switch-cabinet",
+    "scad": "hivemind_switch/multi_material_cabinet.scad",
+    "parts": {
+        "cabinet_0": {
+            "ext": "stl",
+            "part_id": 0,
+            "args":{}
+        },
+        "cabinet_1": {
+            "ext": "stl",
+            "part_id": 1,
+            "args":{}
+        },
+        "lid_0": {
+            "ext": "stl",
+            "part_id": 2,
+            "args":{}
+        },
+        "lid_1": {
+            "ext": "stl",
+            "part_id": 3,
+            "args":{}
+        },
+        "front_0": {
+            "ext": "stl",
+            "part_id": 4,
+            "args":{}
+        },
+        "front_1": {
+            "ext": "stl",
+            "part_id": 5,
+            "args":{}
+        },
+        "rear_0": {
+            "ext": "stl",
+            "part_id": 6,
+            "args":{}
+        },
+        "rear_1": {
+            "ext": "stl",
+            "part_id": 7,
+            "args":{}
+        }
+    },
+    "global_args": {}
+},
+{
+    "name": "router-cabinet",
+    "scad": "hivemind_router/multi_material_cabinet.scad",
+    "parts": {
+        "cabinet_0": {
+            "ext": "stl",
+            "part_id": 0,
+            "args":{}
+        },
+        "cabinet_1": {
+            "ext": "stl",
+            "part_id": 1,
+            "args":{}
+        },
+        "lid_0": {
+            "ext": "stl",
+            "part_id": 2,
+            "args":{}
+        },
+        "lid_1": {
+            "ext": "stl",
+            "part_id": 3,
+            "args":{}
+        },
+        "front_0": {
+            "ext": "stl",
+            "part_id": 4,
+            "args":{}
+        },
+        "front_1": {
+            "ext": "stl",
+            "part_id": 5,
+            "args":{}
+        },
+        "rear_0": {
+            "ext": "stl",
+            "part_id": 6,
+            "args":{}
+        },
+        "rear_1": {
+            "ext": "stl",
+            "part_id": 7,
+            "args":{}
+        }
+    },
+    "global_args": {}
+}
+]
