@@ -27,7 +27,7 @@ function calculate_inside_corners(w, d, h)=[
 function rib_base(side)= (side=="L") ? [[0,-4],[3,0],[0,4]] : [[-3,0],[0,4],[0,-4]];
 function lid_rest(side)= (side=="L") ? [[0,-3],[ 0,0],[3,0]] : [[0,-3],[-3,0],[0,0]];
 
-module cabinet(cabinet_dim=[0,0,0],brackets=[],standoffs=[]){
+module cabinet(cabinet_dim=[0,0,0],brackets=[],standoffs=[], toggle_rear_bottom_screwtraps=true){
     $fn=60;
 	ic = calculate_inside_corners(cabinet_dim.x, cabinet_dim.y, cabinet_dim.z);
 	screw_trap_pos = [
@@ -82,17 +82,19 @@ module cabinet(cabinet_dim=[0,0,0],brackets=[],standoffs=[]){
                                             sphere(d=SCREW_TRAP_OUTER_DIAMETER);
                                 }
                             }
-							//Rear screw traps
-							for(i=[4:5]){
-								translate(screw_trap_pos[i])
-                                    scale([0.7,1,1])
-                                        sphere(d=SCREW_TRAP_OUTER_DIAMETER);
-							}
-                            if(cabinet_dim.z > 90){
-                                for(i=[6:7]){
+                            if(toggle_rear_bottom_screwtraps){
+                                //Rear screw traps
+                                for(i=[4:5]){
                                     translate(screw_trap_pos[i])
-                                        scale([1,1,0.7])
+                                        scale([0.7,1,1])
                                             sphere(d=SCREW_TRAP_OUTER_DIAMETER);
+                                }
+                                if(cabinet_dim.z > 90){
+                                    for(i=[6:7]){
+                                        translate(screw_trap_pos[i])
+                                            scale([1,1,0.7])
+                                                sphere(d=SCREW_TRAP_OUTER_DIAMETER);
+                                    }
                                 }
                             }
 					
@@ -182,12 +184,11 @@ module cabinet(cabinet_dim=[0,0,0],brackets=[],standoffs=[]){
                 for(b=brackets){
                     x = b[0];
                     y = b[1];
-                    w = b[2];
-                    l = b[3];
-                    h = b[4];
-                    xl= b[5];
-                    yl= b[6];
-                    translate(ic[0] + [x,y,0])bracket(w,l,xl,yl,h);
+                    dim = b[2];
+                    thickness=b[3];
+                    length=b[4];
+                    tabs=b[5];
+                    translate(ic[0] + [x,y,0])bracket(dim,thickness,length,tabs);
                 }
             }
             if(len(standoffs) > 0){
@@ -371,7 +372,7 @@ module front_panel(cabinet_dim=[0,0,0],square_cutouts=[], circular_cutouts=[]){
                 x=c[0];
                 z=c[1];
                 d=c[2];
-                translate(ic[0] + [x,-PANEL_THICKNESS,z])
+                translate(ic[0] + [x,PANEL_THICKNESS,z])
                     rotate([90,0,0])
                         cylinder(d=d,h=cabinet_dim.y);
             }
