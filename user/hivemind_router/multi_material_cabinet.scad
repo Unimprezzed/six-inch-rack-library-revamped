@@ -13,30 +13,64 @@ antenna_cutouts = [
 rear_panel_square_cutouts = [
 	
 ];
-//Format: [x,y,points=[],paths=[]]
-rear_panel_polygon_cutouts = [
-	
-];
 pos_off = [10,70,0];
 screw_pos1 = [52,36.5,0] + pos_off;
 screw_pos2 = [36.5,4,0] + pos_off;
 //translate(pos_off+[0,0,6])cube(nano_pi_r5c_dim);
 //standoffs = [[82.5-30.5,42.5-6,5,2,5],[67-30.5,10-6,5,2,5]];
 standoffs = [[screw_pos1.x,screw_pos1.y,5,2,5],[screw_pos2.x,screw_pos2.y,5,2,5]];
-
-partNumber=0;
+rear_panel_type="tabs";
+partNumber=6;
 module make_part(part_id, units, depth){
     cabinet_dim = [CABINET_WIDTH, depth, u2mm(units)];
     brackets = [[CABINET_WIDTH-40,56.7+TOL,eth_adapter_dim,3,5,[false,true,false,true]]];
-    if(part_id == 0){cabinet(cabinet_dim, brackets=brackets,standoffs=standoffs,toggle_rear_bottom_screwtraps=false);}
-    if(part_id == 1){lid(cabinet_dim);}   
-    if(part_id == 2){front_panel(cabinet_dim, circular_cutouts=antenna_cutouts);}
-    //if(part_id == 3){rear_panel(cabinet_dim,square_cutouts=rear_square_cutouts, circular_cutouts=rear_round_cutouts);}
+    if(part_id == 0){
+        difference(){
+            cabinet(cabinet_dim, brackets=brackets,standoffs=standoffs,rear_panel_type=rear_panel_type);
+        }
+    }
+    if(part_id == 1){
+        cabinet(cabinet_dim, brackets=brackets,standoffs=standoffs,rear_panel_type=rear_panel_type);
+    }
+    if(part_id == 2){
+        cabinet_lid(cabinet_dim,rear_panel_type=rear_panel_type
+            );
+    }
+    if(part_id == 3){
+        cabinet_lid(cabinet_dim,rear_panel_type=rear_panel_type
+            );
+    }      
     if(part_id == 4){
+        cabinet_front_panel(
+            cabinet_dim, 
+            circular_cutouts=antenna_cutouts
+            );
+    }
+    if(part_id == 5){
+        cabinet_front_panel(
+            cabinet_dim, 
+            circular_cutouts=antenna_cutouts
+            );
+    }
+    if(part_id == 6){
+        cabinet_rear_panel(
+            cabinet_dim, 
+            square_cutouts=rear_panel_square_cutouts,
+            rear_panel_type=rear_panel_type
+            );
+    }
+    if(part_id == 7){
+        cabinet_rear_panel(
+            cabinet_dim, 
+            square_cutouts=rear_panel_square_cutouts,
+            rear_panel_type=rear_panel_type
+            );
+    }
+    if(part_id == 8){
         cabinet(cabinet_dim,brackets=brackets,standoffs=standoffs);
-        lid(cabinet_dim);
-        front_panel(cabinet_dim, square_cutouts=front_square_cutouts);
-        //rear_panel(cabinet_dim,square_cutouts=rear_square_cutouts, circular_cutouts=rear_round_cutouts);
+        cabinet_lid(cabinet_dim);
+        cabinet_front_panel(cabinet_dim, square_cutouts=front_square_cutouts);
+        //cabinet_rear_panel(cabinet_dim,square_cutouts=rear_square_cutouts, circular_cutouts=rear_round_cutouts);
     }
 }
 make_part(partNumber, units, depth);

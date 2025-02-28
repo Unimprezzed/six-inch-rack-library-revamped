@@ -27,7 +27,7 @@ function calculate_inside_corners(w, d, h)=[
 function rib_base(side)= (side=="L") ? [[0,-4],[3,0],[0,4]] : [[-3,0],[0,4],[0,-4]];
 function lid_rest(side)= (side=="L") ? [[0,-3],[ 0,0],[3,0]] : [[0,-3],[-3,0],[0,0]];
 
-module cabinet(cabinet_dim=[0,0,0],brackets=[],standoffs=[], toggle_rear_bottom_screwtraps=true){
+module cabinet(cabinet_dim=[0,0,0],brackets=[],standoffs=[], rear_panel_type="default"){
     $fn=60;
 	ic = calculate_inside_corners(cabinet_dim.x, cabinet_dim.y, cabinet_dim.z);
 	screw_trap_pos = [
@@ -82,7 +82,7 @@ module cabinet(cabinet_dim=[0,0,0],brackets=[],standoffs=[], toggle_rear_bottom_
                                             sphere(d=SCREW_TRAP_OUTER_DIAMETER);
                                 }
                             }
-                            if(toggle_rear_bottom_screwtraps){
+                            if(rear_panel_type=="default"){
                                 //Rear screw traps
                                 for(i=[4:5]){
                                     translate(screw_trap_pos[i])
@@ -250,7 +250,7 @@ module cabinet(cabinet_dim=[0,0,0],brackets=[],standoffs=[], toggle_rear_bottom_
 	}		
 }
 
-module lid(cabinet_dim=[0,0,0]){
+module cabinet_lid(cabinet_dim=[0,0,0],rear_panel_type="default"){
     $fn=60;
     lid_dim = [cabinet_dim.x-2*(WALL_THICKNESS+TOL), cabinet_dim.y, WALL_THICKNESS];
 	ic = calculate_inside_corners(cabinet_dim.x, cabinet_dim.y, cabinet_dim.z);
@@ -273,18 +273,61 @@ module lid(cabinet_dim=[0,0,0]){
         difference(){
             union(){
                 translate(ic[12]+[TOL,0,-WALL_THICKNESS])cube([cabinet_dim.x-2*(WALL_THICKNESS+TOL), cabinet_dim.y, WALL_THICKNESS]);
-                for(i=[0:3]){
-                    translate(screw_trap_pos[i])
-                        scale([0.7,1,1])
-                            sphere(d=SCREW_TRAP_OUTER_DIAMETER);
+                if(rear_panel_type=="default"){
+                    for(i=[0:3]){
+                        translate(screw_trap_pos[i])
+                            scale([0.7,1,1])
+                                sphere(d=SCREW_TRAP_OUTER_DIAMETER);
+                    }
+                }
+                if(rear_panel_type == "tabs"){
+                    translate(screw_trap_pos[0])
+                            scale([0.7,1,1])
+                                sphere(d=SCREW_TRAP_OUTER_DIAMETER);
+                    translate(screw_trap_pos[1])
+                            scale([0.7,1,1])
+                                sphere(d=SCREW_TRAP_OUTER_DIAMETER);
+                }
+                
+                if(rear_panel_type == "two-screws"){
+                    translate(screw_trap_pos[0])
+                            scale([0.7,1,1])
+                                sphere(d=SCREW_TRAP_OUTER_DIAMETER);
+                    translate(screw_trap_pos[1])
+                            scale([0.7,1,1])
+                                sphere(d=SCREW_TRAP_OUTER_DIAMETER);
+                    rear_screw_trap_pos = ic[16] + [cabinet_dim.x/2,-TOL-2*WALL_THICKNESS,-TOL-WALL_THICKNESS];
                 }
                 dist = dist3D(screw_trap_pos[2],screw_trap_pos[3]);
                 translate(screw_trap_pos[2] + [0,0,-WALL_THICKNESS])cube([dist,WALL_THICKNESS,WALL_THICKNESS]);
             }
             cabinet_vents(cabinet_dim.y);
             translate(ic[4]+[0,-WALL_THICKNESS-TOL,-2*WALL_THICKNESS])cube([cabinet_dim.x-2*WALL_THICKNESS,10,cabinet_dim.z]);
-            translate(screw_trap_pos[0] + [0,0,-SCREW_TRAP_OUTER_DIAMETER*0.2])rotate([270,0,0])cylinder(d=M3_SCREW_THREAD-TOL, h=cabinet_dim.y);
-            translate(screw_trap_pos[1] + [0,0,-SCREW_TRAP_OUTER_DIAMETER*0.2])rotate([270,0,0])cylinder(d=M3_SCREW_THREAD-TOL, h=cabinet_dim.y);
+            if(rear_panel_type == "default"){
+                translate(screw_trap_pos[0] + [0,0,-SCREW_TRAP_OUTER_DIAMETER*0.2])
+                    rotate([270,0,0])
+                        cylinder(d=M3_SCREW_THREAD-TOL, h=cabinet_dim.y);
+                translate(screw_trap_pos[1] + [0,0,-SCREW_TRAP_OUTER_DIAMETER*0.2])
+                    rotate([270,0,0])
+                        cylinder(d=M3_SCREW_THREAD-TOL, h=cabinet_dim.y);
+            
+            }
+            if(rear_panel_type=="tabs"){
+                translate(screw_trap_pos[0] + [0,0,-SCREW_TRAP_OUTER_DIAMETER*0.2])
+                    rotate([270,0,0])
+                        cylinder(d=M3_SCREW_THREAD-TOL, h=M3_SCREW_LENGTH);
+                translate(screw_trap_pos[1] + [0,0,-SCREW_TRAP_OUTER_DIAMETER*0.2])
+                    rotate([270,0,0])
+                        cylinder(d=M3_SCREW_THREAD-TOL, h=M3_SCREW_LENGTH);
+            }
+            if(rear_panel_type=="two-screws"){
+                rear_screw_trap_pos = ic[16] + [cabinet_dim.x/2,-TOL-2*WALL_THICKNESS,-TOL-WALL_THICKNESS];
+                translate(rear_screw_trap_pos + [0,0,-SCREW_TRAP_OUTER_DIAMETER*0.2])
+                    rotate([270,0,0])
+                        cylinder(d=M3_SCREW_THREAD-TOL, h=cabinet_dim.y);
+            }
+            
+            
             for(i=[4:2:9]){
                 translate(screw_trap_pos[i] + [SCREW_TRAP_OUTER_DIAMETER*0.2,0,0])
                     m3_cs_screw();
@@ -298,7 +341,7 @@ module lid(cabinet_dim=[0,0,0]){
     }
 }
 
-module front_panel(cabinet_dim=[0,0,0],square_cutouts=[], circular_cutouts=[]){
+module cabinet_front_panel(cabinet_dim=[0,0,0],square_cutouts=[], circular_cutouts=[]){
     $fn=60; 
 	ic = calculate_inside_corners(cabinet_dim.x, cabinet_dim.y, cabinet_dim.z);
     //Positions for the holes to mount the cabinet to the rack
@@ -380,62 +423,104 @@ module front_panel(cabinet_dim=[0,0,0],square_cutouts=[], circular_cutouts=[]){
     }
     
 }
+/*
+    Rear Panel Types: 
+        Default: Held in place with 4 screws set SCREW_TRAP_DISTANCE millimeters apart
+        Tabs: Panel held in place with tabs 
+        Two-screws: Panel held in place with two screw traps centered
+*/
 
-module rear_panel(cabinet_dim=[0,0,0],square_cutouts=[], circular_cutouts=[]){
-    $fn=60;
-    rear_panel_dim = [cabinet_dim.x-2*(WALL_THICKNESS+TOL), WALL_THICKNESS,cabinet_dim.z-2*(WALL_THICKNESS+TOL) ];
-	ic = calculate_inside_corners(cabinet_dim.x, cabinet_dim.y, cabinet_dim.z);
-    screw_pos = [
-        ic[4] + [SCREW_TRAP_DISTANCE,-1,SCREW_TRAP_OUTER_DIAMETER*0.2],
-        ic[5] + [-SCREW_TRAP_DISTANCE,-1,SCREW_TRAP_OUTER_DIAMETER*0.2],
-        ic[4] + [SCREW_TRAP_DISTANCE,-1,cabinet_dim.z-2*WALL_THICKNESS-SCREW_TRAP_OUTER_DIAMETER*0.2],
-        ic[5] + [-SCREW_TRAP_DISTANCE,-1,cabinet_dim.z-2*WALL_THICKNESS-SCREW_TRAP_OUTER_DIAMETER*0.2],
-        ic[10]+ [SCREW_TRAP_OUTER_DIAMETER*0.2,-1,0],
-        ic[11]+ [-SCREW_TRAP_OUTER_DIAMETER*0.2,-1,0],
-    ];
-    
-    difference(){
-        translate([WALL_THICKNESS+TOL, cabinet_dim.y-WALL_THICKNESS-TOL, WALL_THICKNESS+TOL])
-            cube(rear_panel_dim);
-        for(i=[0:3]){
-            translate(screw_pos[i])
-                rotate([270,0,0])
-                    m3_cs_screw();
-        }
-        if(cabinet_dim.z > 90){
-            translate(screw_pos[4])
-                rotate([270,0,0])
-                    m3_cs_screw();
-            translate(screw_pos[5])
-                rotate([270,0,0])
-                    m3_cs_screw();
-        }
-        //Square cutouts 
-        if(len(square_cutouts)>0){
-            for(c=square_cutouts){
-                x = c[0];
-                z = c[1];
-                w = c[2];
-                h = c[3];
-                translate(ic[0] + [x,0,z])
-                    rotate([0,0,0])
-                        cube([w, cabinet_dim.y, h]);
-            }
-        }
+
+module cabinet_rear_panel(cabinet_dim=[0,0,0], square_cutouts=[], circular_cutouts=[], rear_panel_type="default"){
+    if(rear_panel_type != "open"){
+        $fn=60;
+        rear_panel_dim = [cabinet_dim.x-2*(WALL_THICKNESS+TOL), WALL_THICKNESS,cabinet_dim.z-2*(WALL_THICKNESS+TOL) ];
+        ic = calculate_inside_corners(cabinet_dim.x, cabinet_dim.y, cabinet_dim.z);    
+        screw_pos = [
+            ic[4] + [SCREW_TRAP_DISTANCE,-1,SCREW_TRAP_OUTER_DIAMETER*0.2],
+            ic[5] + [-SCREW_TRAP_DISTANCE,-1,SCREW_TRAP_OUTER_DIAMETER*0.2],
+            ic[4] + [SCREW_TRAP_DISTANCE,-1,cabinet_dim.z-2*WALL_THICKNESS-SCREW_TRAP_OUTER_DIAMETER*0.2],
+            ic[5] + [-SCREW_TRAP_DISTANCE,-1,cabinet_dim.z-2*WALL_THICKNESS-SCREW_TRAP_OUTER_DIAMETER*0.2],
+            ic[10]+ [SCREW_TRAP_OUTER_DIAMETER*0.2,-1,0],
+            ic[11]+ [-SCREW_TRAP_OUTER_DIAMETER*0.2,-1,0],
+        ];
         
-        //Circular cutouts
-        if(len(circular_cutouts)>0){
-            for(c=circular_cutouts){
-                x=c[0];
-                z=c[1];
-                d=c[2];
-                translate(ic[0] + [x,0,z])
-                    rotate([90,0,0])
-                        cylinder(d=d,h=cabinet_dim.y);
+        difference(){
+            translate([WALL_THICKNESS+TOL, cabinet_dim.y-WALL_THICKNESS-TOL, WALL_THICKNESS+TOL])
+                union(){
+                    cube(rear_panel_dim);
+                    if(rear_panel_type=="tabs"){
+                        translate([0,0,rear_panel_dim.z/2])
+                            rotate([270,0,270])
+                                tab();
+                        translate([rear_panel_dim.x,0,rear_panel_dim.z/2])
+                            rotate([90,0,270])
+                                tab();
+                        translate([rear_panel_dim.x/2,0,WALL_THICKNESS+TOL])
+                            rotate([0,0,270])
+                                tab();
+                        translate([rear_panel_dim.x/2,0,rear_panel_dim.z - WALL_THICKNESS-TOL])
+                            rotate([180,0,270])
+                                tab();
+                    }
+                }
+                
+            if(rear_panel_type == "default"){
+                for(i=[0:3]){
+                    translate(screw_pos[i])
+                        rotate([270,0,0])
+                            m3_cs_screw();
+                }
+                if(cabinet_dim.z > 90){
+                    translate(screw_pos[4])
+                        rotate([270,0,0])
+                            m3_cs_screw();
+                    translate(screw_pos[5])
+                        rotate([270,0,0])
+                            m3_cs_screw();
+                }
             }
-        } 
+            if(rear_panel_type=="two-screws"){
+                bottom_screw_pos = ic[4] + [rear_panel_dim.x/2,-1,SCREW_TRAP_OUTER_DIAMETER*0.2];
+                top_screw_pos = ic[4] + [rear_panel_dim.x/2,-1,cabinet_dim.z-2*WALL_THICKNESS-SCREW_TRAP_OUTER_DIAMETER*0.2];
+                translate(bottom_screw_pos)
+                    rotate([270,0,0])
+                        m3_cs_screw();
+                translate(top_screw_pos)
+                    rotate([270,0,0])
+                        m3_cs_screw();
+            }
+            
+            
+            //Square cutouts 
+            if(len(square_cutouts)>0){
+                for(c=square_cutouts){
+                    x = c[0];
+                    z = c[1];
+                    w = c[2];
+                    h = c[3];
+                    translate(ic[0] + [x,0,z])
+                        rotate([0,0,0])
+                            cube([w, cabinet_dim.y, h]);
+                }
+            }
+            
+            //Circular cutouts
+            if(len(circular_cutouts)>0){
+                for(c=circular_cutouts){
+                    x=c[0];
+                    z=c[1];
+                    d=c[2];
+                    translate(ic[0] + [x,0,z])
+                        rotate([90,0,0])
+                            cylinder(d=d,h=cabinet_dim.y);
+                }
+            } 
+        }
     }
-
+    if(rear_panel_type == "open"){
+        echo("Rear Panel Type will not be generated.");
+    }
 }
 
 module make_part(part_id, units, depth, brackets=[],standoffs=[],square_holes=[], circular_holes=[]){

@@ -78,7 +78,7 @@ module make_mm_part(part_id, units, depth, brackets=[],standoffs=[],square_holes
     //Base lid
     if(part_id == 2){
         difference(){
-            lid(cabinet_dim);
+            cabinet_lid(cabinet_dim);
             translate([5+WALL_THICKNESS,5,cabinet_dim.z-WALL_THICKNESS])
                 linear_extrude(WALL_THICKNESS)
                     hex_grid_shell(10,1,13,16);
@@ -87,7 +87,7 @@ module make_mm_part(part_id, units, depth, brackets=[],standoffs=[],square_holes
     //Lid cutout 1
     if(part_id == 3){
         intersection(){
-            lid(cabinet_dim);
+            cabinet_lid(cabinet_dim);
             translate([5+WALL_THICKNESS,5,cabinet_dim.z-WALL_THICKNESS])
                 linear_extrude(WALL_THICKNESS)
                     hex_grid_shell(10,1,13,16);
@@ -96,7 +96,7 @@ module make_mm_part(part_id, units, depth, brackets=[],standoffs=[],square_holes
     //Base front panel 
     if(part_id == 4){
         difference(){
-            rotate([270,0,0])front_panel(cabinet_dim,square_holes, circular_holes);
+            rotate([270,0,0])cabinet_front_panel(cabinet_dim,square_holes, circular_holes);
                 translate([-EXTRUSION_PROFILE_WIDTH+2.5,2.5,0])linear_extrude(cabinet_dim.z)
                     hex_grid_shell(10,1,6,23);
                     
@@ -109,7 +109,7 @@ module make_mm_part(part_id, units, depth, brackets=[],standoffs=[],square_holes
     if(part_id == 5){
     intersection(){
         difference(){
-            rotate([270,0,0])front_panel(cabinet_dim,square_holes, circular_holes);
+            rotate([270,0,0])cabinet_front_panel(cabinet_dim,square_holes, circular_holes);
                 
             translate([-4+CABINET_WIDTH/2,23,0])cube([OLED_window_w, OLED_window_h,1]);
             translate([CABINET_WIDTH/2,23,1])cube([OLED_screen_w, OLED_screen_h,2]);
@@ -125,7 +125,7 @@ module make_mm_part(part_id, units, depth, brackets=[],standoffs=[],square_holes
         difference(){
         translate([-WALL_THICKNESS-TOL,cabinet_dim.z-WALL_THICKNESS-TOL,-cabinet_dim.y+WALL_THICKNESS+TOL])
             rotate([90,0,0])
-                rear_panel(cabinet_dim,square_holes, circular_holes);
+                cabinet_rear_panel(cabinet_dim,square_holes, circular_holes);
         translate([2.5,2.5,0])linear_extrude(cabinet_dim.z)hex_grid_shell(10,1,6,17);
         }
     }    
@@ -134,7 +134,7 @@ module make_mm_part(part_id, units, depth, brackets=[],standoffs=[],square_holes
                 intersection(){
         translate([-WALL_THICKNESS-TOL,cabinet_dim.z-WALL_THICKNESS-TOL,-cabinet_dim.y+WALL_THICKNESS+TOL])
             rotate([90,0,0])
-                rear_panel(cabinet_dim,square_holes, circular_holes);
+                cabinet_rear_panel(cabinet_dim,square_holes, circular_holes);
         translate([2.5,2.5,0])linear_extrude(cabinet_dim.z)hex_grid_shell(10,1,6,17);
         }
     }    

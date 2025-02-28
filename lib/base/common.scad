@@ -96,7 +96,17 @@ module standoff(od,id,h){
 module standoff_thru_screw(od,id){
     cylinder(h=WALL_THICKNESS, d1=od, d2=id);
 }  
-
+module tab(){
+    tab_poly_points = [
+        [0,WALL_THICKNESS],
+        [0,0],
+        [WALL_THICKNESS+TOL,0],
+        [WALL_THICKNESS+TOL+2,-2],
+        [WALL_THICKNESS+TOL+4,0],
+        [WALL_THICKNESS+TOL+4,WALL_THICKNESS],
+    ];
+    translate([0,WALL_THICKNESS/2,0])rotate([90,0,0])linear_extrude(WALL_THICKNESS)polygon(tab_poly_points);
+}
 module grid(){
     width=SIX_INCH-1;
     
