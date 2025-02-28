@@ -97,6 +97,12 @@ module cabinet(cabinet_dim=[0,0,0],brackets=[],standoffs=[], rear_panel_type="de
                                     }
                                 }
                             }
+                            if(rear_panel_type == "two_screws"){
+                                rear_screw_trap_pos = screw_trap_pos[4] + [-cabinet_dim.x/2,0,0];
+                                translate(rear_screw_trap_pos)
+                                    scale([1,1,0.7])
+                                        sphere(d=SCREW_TRAP_OUTER_DIAMETER);
+                            }
 					
 							//Top screw traps
 							for(i=[8:11]){
