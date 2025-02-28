@@ -1,6 +1,4 @@
-include <../../base/constants.scad>    //Constants
-include <../../base/common.scad>       //Common parts
-include <../../cabinet/lib.scad>       //Cabinet library
+include <../../lib/six-inch.scad>
 
 depth = 130; 
 units = 2;

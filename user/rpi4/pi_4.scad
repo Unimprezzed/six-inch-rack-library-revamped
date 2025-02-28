@@ -1,6 +1,4 @@
-include <../../base/constants.scad>    //Constants
-include <../../base/common.scad>       //Common parts
-include <../../cabinet/lib.scad>       //Cabinet library
+include <../../lib/six-inch.scad>
 
 //Taken from the mechancial drawings for the Raspberry Pi 4, located here: (https://datasheets.raspberrypi.com/rpi4/raspberry-pi-4-mechanical-drawing.pdf) 
 board_dimensions = [85, 56];            //85 mm on X, 56mm on Y

@@ -1,6 +1,4 @@
-include <../../base/constants.scad>    //Constants
-include <../../base/common.scad>       //Common parts
-include <../../cabinet/lib.scad>       //Cabinet library
+include <../../lib/six-inch.scad>
 include <../../external/hex-grid/hex-grid.scad>             //hexagon grid library
  
 partNumber = 0;
