@@ -1,19 +1,18 @@
 include <../base/constants.scad>
 include <../base/common.scad>
 
-module front_panel(units, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[]){
-	panel_dim = [CABINET_WIDTH-2*(WALL_THICKNESS+TOL),WALL_THICKNESS,u2mm(units)];
-    
+module enclosure_front_panel(units, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[]){
+	panel_dim = [CABINET_WIDTH-2*(WALL_THICKNESS+TOL),WALL_THICKNESS,u2mm(units)];    
 }
 
-module rear_panel(units, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[]){
+module enclosure_rear_panel(units, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[]){
 	panel_dim=[CABINET_WIDTH-2*(WALL_THICKNESS+TOL),WALL_THICKNESS,u2mm(units)];
 }
 
-module bottom_panel(depth, brackets=[], standoffs=[]){
+module enclosure_bottom_panel(depth, brackets=[], standoffs=[]){
     inside_corner=[WALL_THICKNESS,WALL_THICKNESS,WALL_THICKNESS];
 	panel_dim=[CABINET_WIDTH, depth, WALL_THICKNESS];
-    screw_trap_size =8;
+    screw_trap_size = 8;
     screw_trap_pos = [
         [WALL_THICKNESS,screw_trap_size+TOL,WALL_THICKNESS],
         [screw_trap_size+TOL,WALL_THICKNESS,WALL_THICKNESS],
@@ -121,20 +120,20 @@ module bottom_panel(depth, brackets=[], standoffs=[]){
     }
 }
 
-module top_panel(depth, brackets=[], standoffs=[]){
+module enclosure_top_panel(depth, brackets=[], standoffs=[]){
 	panel_dim=[CABINET_WIDTH-2*(WALL_THICKNESS+TOL), depth, WALL_THICKNESS];
 }
 
-module left_panel(units, depth, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[], shelves=[]){
+module enclosure_left_panel(units, depth, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[], shelves=[]){
 	panel_dim=[WALL_THICKNESS,depth,u2mm(units)];
 }
 
-module right_panel(units, depth, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[], shelves=[]){
+module enclosure_right_panel(units, depth, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[], shelves=[]){
 	panel_dim=[WALL_THICKNESS,depth,u2mm(units)];
 
 }
 
-module shelf(depth, brackets=[], standoffs=[]){
+module enclosure_shelf(depth, brackets=[], standoffs=[]){
 	shelf_dim=[CABINET_WIDTH-2*(WALL_THICKNESS+TOL), depth-2*(WALL_THICKNESS+TOL), WALL_THICKNESS];
 
 }

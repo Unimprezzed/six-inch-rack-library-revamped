@@ -27,7 +27,7 @@ module nutless_trap(length){
 }
 /*
  For the top and bottom of the rack
- I've also had success attaching these to the sides of a rack to add more stability for a taller rack or keep curious hands away from important cables. 
+ I've also had success attaching these to the sides of a rack to add more stability for a taller rack or keep curious hands away from important cables. You'll need to add T-nuts for the 2020 extrusion to your BOM if you use this 
  Type parameter determines what pattern is used for the cutouts (if any): 
  0: Closed, no feet
  1: Closed, square frustrum feet
@@ -45,8 +45,7 @@ module nutless_trap(length){
  13: Vents, square frustrum feet
  14: Vents, hexagonal frustrum feet
 */
-module rack_panel(type){
-
+module rack_end(type){
     union(){
         //Subtractive elements first
         difference(){
@@ -90,12 +89,11 @@ module rack_panel(type){
                               [PANEL_WIDTH-20,PANEL_WIDTH-10,-PANEL_THICKNESS],
                               [PANEL_WIDTH-10,20,-PANEL_THICKNESS],
                               [PANEL_WIDTH-10,PANEL_WIDTH/2,-PANEL_THICKNESS],
-                              [PANEL_WIDTH-10,PANEL_WIDTH-20,-PANEL_THICKNESS],
+                              [PANEL_WIDTH-10,PANEL_WIDTH-20,-PANEL_THICKNESS]
                               ];
             for(f=foot_positions)translate(f)linear_extrude(PANEL_THICKNESS, scale=1.5)polygon(foot_profile);
         }
         if(type % 3 == 2){
-            foot_profile = circle(5,$fn=6);
             foot_positions = [[20,10,-PANEL_THICKNESS],
                               [PANEL_WIDTH/2,10,-PANEL_THICKNESS],
                               [PANEL_WIDTH-20,10,-PANEL_THICKNESS],
@@ -107,25 +105,22 @@ module rack_panel(type){
                               [PANEL_WIDTH-20,PANEL_WIDTH-10,-PANEL_THICKNESS],
                               [PANEL_WIDTH-10,20,-PANEL_THICKNESS],
                               [PANEL_WIDTH-10,PANEL_WIDTH/2,-PANEL_THICKNESS],
-                              [PANEL_WIDTH-10,PANEL_WIDTH-20,-PANEL_THICKNESS],
+                              [PANEL_WIDTH-10,PANEL_WIDTH-20,-PANEL_THICKNESS]
                               ];
-            for(f=foot_positions)translate(f)linear_extrude(PANEL_THICKNESS, scale=0.5)polygon(foot_profile);
+            for(f=foot_positions)translate(f)linear_extrude(PANEL_THICKNESS, scale=0.5)circle(5,$fn=6);
         }
     }
 }
-
-
-
-module side_panel(){
+//This is a proper solution for mounting structural supports to the sides of the rack using the nutless traps. 
+module side_panel(units, square_cutouts=[], circular_cutouts=[], center_cutout=false, center_cutout_type="open"){
+    difference(){
+    
+    }
     
 }
-
-
 //This is for mounting things like power supplies to the sides and back of a 
 module side_bracket(part_dim, units){
     
 
 }
-rack_panel(type=9);
-//rack_panel(type=10);
 

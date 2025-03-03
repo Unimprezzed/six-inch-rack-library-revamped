@@ -32,24 +32,24 @@ module cabinet(cabinet_dim=[0,0,0],brackets=[],standoffs=[], rear_panel_type="de
 	ic = calculate_inside_corners(cabinet_dim.x, cabinet_dim.y, cabinet_dim.z);
 	screw_trap_pos = [
 		//Front Screw traps
-		ic[0] + [SCREW_TRAP_DISTANCE,0,0],													//0
-		ic[1] + [-SCREW_TRAP_DISTANCE,0,0],													//1
-		ic[6],																				//2
-		ic[7],																				//3
+		ic[0] + [SCREW_TRAP_DISTANCE,0,0],													
+		ic[1] + [-SCREW_TRAP_DISTANCE,0,0],													
+		ic[6],																				
+		ic[7],																				
 		//Rear Screw Traps
-		ic[4] + [SCREW_TRAP_DISTANCE,-TOL-2*WALL_THICKNESS,0],								//4
-		ic[5] + [-SCREW_TRAP_DISTANCE,-TOL-2*WALL_THICKNESS,0],								//5
-		ic[10] + [0,-TOL-2*WALL_THICKNESS,0],												//6
-		ic[11] + [0,-TOL-2*WALL_THICKNESS,0],												//7
+		ic[4] + [SCREW_TRAP_DISTANCE,-TOL-2*WALL_THICKNESS,0],								
+		ic[5] + [-SCREW_TRAP_DISTANCE,-TOL-2*WALL_THICKNESS,0],								
+		ic[10] + [0,-TOL-2*WALL_THICKNESS,0],												
+		ic[11] + [0,-TOL-2*WALL_THICKNESS,0],												
 		//Top Screw Traps
-		ic[12] + [0,SCREW_TRAP_OUTER_DIAMETER/2,-TOL-WALL_THICKNESS],						//8
-		ic[13] + [0,SCREW_TRAP_OUTER_DIAMETER/2,-TOL-WALL_THICKNESS],						//9
-		ic[16] + [0,-SCREW_TRAP_OUTER_DIAMETER/2-TOL-WALL_THICKNESS,-TOL-WALL_THICKNESS],	//10
-		ic[17] + [0,-SCREW_TRAP_OUTER_DIAMETER/2-TOL-WALL_THICKNESS,-TOL-WALL_THICKNESS],	//11
-		ic[14] + [0,0,-TOL-WALL_THICKNESS],													//12
-		ic[15] + [0,0,-TOL-WALL_THICKNESS]													//13
+		ic[12] + [0,SCREW_TRAP_OUTER_DIAMETER/2,-TOL-WALL_THICKNESS],						
+		ic[13] + [0,SCREW_TRAP_OUTER_DIAMETER/2,-TOL-WALL_THICKNESS],						
+		ic[16] + [0,-SCREW_TRAP_OUTER_DIAMETER/2-TOL-WALL_THICKNESS,-TOL-WALL_THICKNESS],	
+		ic[17] + [0,-SCREW_TRAP_OUTER_DIAMETER/2-TOL-WALL_THICKNESS,-TOL-WALL_THICKNESS],	
+		ic[14] + [0,0,-TOL-WALL_THICKNESS],													
+		ic[15] + [0,0,-TOL-WALL_THICKNESS]													
 	];
-	//Outside of the cube means it's considered out of bounds for the cabinet. 
+	 
 	intersection(){
         difference(){
 		union(){
@@ -251,7 +251,7 @@ module cabinet(cabinet_dim=[0,0,0],brackets=[],standoffs=[], rear_panel_type="de
         
         
         }
-		//This cube ensures that no component inside the cabinet sticks out beyond the design specs. 
+		//This cube ensures that no component inside the cabinet sticks out, which might affect how the cabinet slots into the rack.
 		cube(cabinet_dim);
 	}		
 }
@@ -347,17 +347,10 @@ module cabinet_lid(cabinet_dim=[0,0,0],rear_panel_type="default"){
     }
 }
 
-module cabinet_front_panel(cabinet_dim=[0,0,0],square_cutouts=[], circular_cutouts=[]){
+module cabinet_front_panel(cabinet_dim=[0,0,0],square_cutouts=[], circular_cutouts=[],text=[]){
     $fn=60; 
 	ic = calculate_inside_corners(cabinet_dim.x, cabinet_dim.y, cabinet_dim.z);
     //Positions for the holes to mount the cabinet to the rack
-    mounting_screw_pos = [
-        [-HALF_EXTRUSION_PROFILE_WIDTH, -PANEL_THICKNESS,U/2],
-        [-HALF_EXTRUSION_PROFILE_WIDTH, -PANEL_THICKNESS, cabinet_dim.z-U/2],
-        [SIX_INCH-(EXTRUSION_PROFILE_WIDTH*1.5),-PANEL_THICKNESS,U/2],
-        [SIX_INCH-(EXTRUSION_PROFILE_WIDTH*1.5),-PANEL_THICKNESS,
-        cabinet_dim.z-U/2]
-    ];
     handle_screw_pos =[
         [-2,-M3_CS_SCREW_HEAD_HEIGHT,4.5],
         [-2,-M3_CS_SCREW_HEAD_HEIGHT,cabinet_dim.z-4.5],
@@ -374,28 +367,20 @@ module cabinet_front_panel(cabinet_dim=[0,0,0],square_cutouts=[], circular_cutou
     ];
     
     difference(){
-        translate([-EXTRUSION_PROFILE_WIDTH+1.25,-PANEL_THICKNESS+1.25,1.25]){
-            minkowski(){
-                cube([SIX_INCH-2.5,PANEL_THICKNESS-2.5,cabinet_dim.z-2.5]);
-                sphere(r=1.25);
-            }
-        }
-        //
-        for(s=mounting_screw_pos){
-            translate(s)
-                rotate([270,0,0])
-                    cylinder(r=2.3,h=cabinet_dim.y);
-        }
+        rack_panel(cabinet_dim);
+	//Make holes for the screws that hold the handles on 
         for(s=handle_screw_pos){
             translate(s)
                 rotate([270,0,0])
                     m3_cs_screw();
         }
+	//Make holes for the screws to attach the panel to the rest of the cabinet
         for(i=[0:3]){
             translate(cabinet_screws_pos[i])
                 rotate([90,0,0])
                     m3_cs_screw();
         }
+	//Add the screws for the screwtraps on the side of the cabinet front (only applicable if the height exceeds a certain threshold)
         if(cabinet_dim.z > 90){
             for(i=[4:5]){
                 translate(cabinet_screws_pos[i])
@@ -403,7 +388,7 @@ module cabinet_front_panel(cabinet_dim=[0,0,0],square_cutouts=[], circular_cutou
                         m3_cs_screw();
             }
         }
-        //Square cutouts 
+        //Square cutouts in the front panel
         if(len(square_cutouts)>0){
             for(c=square_cutouts){
                 x = c[0];
@@ -415,7 +400,7 @@ module cabinet_front_panel(cabinet_dim=[0,0,0],square_cutouts=[], circular_cutou
                         cube([w, cabinet_dim.y, h]);
             }
         }
-        //Circular cutouts
+        //Circular cutouts in the front panel
         if(len(circular_cutouts)>0){
             for(c=circular_cutouts){
                 x=c[0];
@@ -427,7 +412,24 @@ module cabinet_front_panel(cabinet_dim=[0,0,0],square_cutouts=[], circular_cutou
             }
         } 
     }
-    
+    //
+    if(len(text) > 0){
+        for(t=text){
+		x=t[0];
+		y=t[1];
+		text_type=t[2];
+		text_str = t[3];
+		size = t[4];
+		font = t[5];
+		halign = t[6];
+		valign = t[7];
+		spacing=t[8];
+		direction=t[9];
+		language=t[10];
+		script=t[11];
+		fn=t[12];
+	}
+    }
 }
 /*
     Rear Panel Types: 
@@ -435,7 +437,6 @@ module cabinet_front_panel(cabinet_dim=[0,0,0],square_cutouts=[], circular_cutou
         Tabs: Panel held in place with tabs 
         Two-screws: Panel held in place with two screw traps centered
 */
-
 
 module cabinet_rear_panel(cabinet_dim=[0,0,0], square_cutouts=[], circular_cutouts=[], rear_panel_type="default"){
     if(rear_panel_type != "open"){

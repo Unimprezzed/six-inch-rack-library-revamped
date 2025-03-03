@@ -5,6 +5,7 @@ HALF_EXTRUSION_PROFILE_WIDTH=EXTRUSION_PROFILE_WIDTH/2;
 CABINET_WIDTH = SIX_INCH - 2 * EXTRUSION_PROFILE_WIDTH; //Cabinet Width (mm)
 U = (44.5/19)* 6; 					               		//1U
 TOL=0.1; 												//Tolerance for generated parts (mm)
+HEIGHT_CS_THRESHOLD=70; //Minimum height where we will add additional holes to the rack panel for mounting 
 
 //Wall and panel 
 WALL_THICKNESS = 2;										//Thickness of the walls (mm)
