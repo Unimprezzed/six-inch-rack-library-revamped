@@ -1,13 +1,62 @@
 include <../base/constants.scad>
 include <../base/common.scad>
 
-module enclosure_front_panel(units, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[]){
-	panel_dim = [CABINET_WIDTH-2*(WALL_THICKNESS+TOL),WALL_THICKNESS,u2mm(units)];    
+module enclosure_Np(dim,square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[]){
+    panel_dim=[dim.x-2*WALL_THICKNESS,WALL_THICKNESS,dim.z-2*WALL_THICKNESS];
+    translate([WALL_THICKNESS,dim.y-WALL_THICKNESS,0]){
+        color("red",0.5){
+            cube(panel_dim);
+        }
+    }
+}
+module enclosure_Sp(dim,square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[]){
+    panel_dim=[dim.x+2*EXTRUSION_PROFILE_WIDTH,PANEL_THICKNESS,dim.z];
+    translate([-0,0,-WALL_THICKNESS]){
+        color("blue",0.5){
+            rack_panel(panel_dim);
+        }
+    }
+}
+module enclosure_Ep(dim, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[]){
+    panel_dim=[WALL_THICKNESS,dim.y,dim.z-2*WALL_THICKNESS];
+    translate([dim.x-WALL_THICKNESS,0,0]){    
+        color("green",0.5){
+            cube(panel_dim);
+        }
+    }
+}
+module enclosure_Wp(dim, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[]){
+    panel_dim=[WALL_THICKNESS,dim.y,dim.z-2*WALL_THICKNESS];
+    translate([0,0,0]){
+        color("yellow",0.5){
+           cube(panel_dim);
+        }
+    }
+}
+module enclosure_Up(dim, brackets=[], standoffs=[]){
+    panel_dim=[dim.x,dim.y,WALL_THICKNESS];
+    translate([0,0,dim.z-2*WALL_THICKNESS]){
+        color("orange",0.5){
+            difference(){
+                cube(panel_dim);
+                cabinet_vents(dim.y);
+            }
+        }
+    }
+}
+module enclosure_Dp(dim, brackets=[], standoffs=[]){
+    panel_dim=[dim.x,dim.y,WALL_THICKNESS];
+    translate([0,0,-WALL_THICKNESS]){
+        color("purple",0.5){
+            difference(){
+                cube(panel_dim);
+                cabinet_vents(dim.y);
+            }
+        }
+    }
 }
 
-module enclosure_rear_panel(units, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[]){
-	panel_dim=[CABINET_WIDTH-2*(WALL_THICKNESS+TOL),WALL_THICKNESS,u2mm(units)];
-}
+
 
 module enclosure_bottom_panel(depth, brackets=[], standoffs=[]){
     inside_corner=[WALL_THICKNESS,WALL_THICKNESS,WALL_THICKNESS];
@@ -120,22 +169,19 @@ module enclosure_bottom_panel(depth, brackets=[], standoffs=[]){
     }
 }
 
-module enclosure_top_panel(depth, brackets=[], standoffs=[]){
-	panel_dim=[CABINET_WIDTH-2*(WALL_THICKNESS+TOL), depth, WALL_THICKNESS];
-}
+$fn=20;
+dim = [CABINET_WIDTH,110,u2mm(5)];
+explode_up = [0,0,1];
+explode_down = [0,0,-1];
+explode_backward = [0,1,0];
+explode_forward = [0,-1,0];
+explode_left = [-1,0,0];
+explode_right = [1,0,0];
+explode_distance=20;
 
-module enclosure_left_panel(units, depth, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[], shelves=[]){
-	panel_dim=[WALL_THICKNESS,depth,u2mm(units)];
-}
-
-module enclosure_right_panel(units, depth, square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[], shelves=[]){
-	panel_dim=[WALL_THICKNESS,depth,u2mm(units)];
-
-}
-
-module enclosure_shelf(depth, brackets=[], standoffs=[]){
-	shelf_dim=[CABINET_WIDTH-2*(WALL_THICKNESS+TOL), depth-2*(WALL_THICKNESS+TOL), WALL_THICKNESS];
-
-}
-
-bottom_panel(110);
+translate(explode_backward*explode_distance)enclosure_Np(dim);
+translate(explode_forward*explode_distance)enclosure_Sp(dim);
+translate(explode_right*explode_distance)enclosure_Ep(dim);
+translate(explode_left*explode_distance)enclosure_Wp(dim);
+translate(explode_up*explode_distance)enclosure_Up(dim);
+translate(explode_down*explode_distance)enclosure_Dp(dim);
