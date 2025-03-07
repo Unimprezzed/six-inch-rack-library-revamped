@@ -5,15 +5,137 @@ module enclosure_Np(dim,square_cutouts=[], circular_cutouts=[], brackets=[], sta
     panel_dim=[dim.x-2*WALL_THICKNESS,WALL_THICKNESS,dim.z-2*WALL_THICKNESS];
     translate([WALL_THICKNESS,dim.y-WALL_THICKNESS,0]){
         color("red",0.5){
-            cube(panel_dim);
+            difference(){
+                union(){
+                    difference(){
+                        cube(panel_dim);
+                        if(len(square_cutouts) > 0){
+                            for(c=square_cutouts_){
+                                x=c[0];
+                                z=c[1];
+                                w=c[2];
+                                h=c[3];
+                                translate([x,0,z])cube([w,300,h]);
+                            }
+                        }
+                        if(len(circular_cutouts) > 0){
+                            for(c=circular_cutouts){
+                                x=c[0];
+                                z=c[1];
+                                d=c[2];
+                                translate([x,0,z])rotate([90,0,0])cylinder(d=d,h=300);
+                            }
+                        }
+                    }
+                    if(len(brackets) > 0){
+                        for(b=brackets){
+                            x=b[0];
+                            z=b[1];
+                            dim=b[2];
+                            thickness=b[3];
+                            length=b[4];
+                            tabs=b[5];
+                            translate([x,0,z])
+                                rotate([90,0,0])
+                                    bracket(dim, thickness,length, tabs);
+                        }
+                    }
+                    if(len(standoffs) > 0){
+                        for(s=standoffs){
+                            x=s[0];
+                            z=s[1];
+                            od=s[2];
+                            id=s[3];
+                            h=s[4];
+                            translate([x,0,z])
+                                rotate([90,0,0])
+                                    standoff(od,id,h);
+                        }
+                    }
+                }
+               if(len(standoffs) > 0){
+                    for(s=standoffs){
+                        if(s[5]){
+                            x=s[0];
+                            z=s[1];
+                            od=s[2];
+                            id=s[3];
+                            translate([x,0,z])
+                                rotate([90,0,0])
+                                    standoff_thru_screw(od,id);
+                        }
+                    }
+               }
+            }
         }
     }
 }
 module enclosure_Sp(dim,square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[]){
     panel_dim=[dim.x+2*EXTRUSION_PROFILE_WIDTH,PANEL_THICKNESS,dim.z];
     translate([-0,0,-WALL_THICKNESS]){
-        color("blue",0.5){
-            rack_panel(panel_dim);
+        color("blue",0.5){            
+            difference(){
+                union(){
+                    difference(){
+                        rack_panel(panel_dim);
+                        if(len(square_cutouts) > 0){
+                            for(c=square_cutouts_){
+                                x=c[0];
+                                z=c[1];
+                                w=c[2];
+                                h=c[3];
+                                translate([x,0,z])rotate([270,270,0])cube([w,300,h]);
+                            }
+                        }
+                        if(len(circular_cutouts) > 0){
+                            for(c=circular_cutouts){
+                                x=c[0];
+                                z=c[1];
+                                d=c[2];
+                                translate([x,0,z])rotate([270,270,0])cylinder(d=d,h=300);
+                            }
+                        }
+                    }
+                    if(len(brackets) > 0){
+                        for(b=brackets){
+                            x=b[0];
+                            z=b[1];
+                            dim=b[2];
+                            thickness=b[3];
+                            length=b[4];
+                            tabs=b[5];
+                            translate([x,0,z])
+                                rotate([270,270,0])
+                                    bracket(dim, thickness,length, tabs);
+                        }
+                    }
+                    if(len(standoffs) > 0){
+                        for(s=standoffs){
+                            x=s[0];
+                            z=s[1];
+                            od=s[2];
+                            id=s[3];
+                            h=s[4];
+                            translate([x,0,z])
+                                rotate([270,270,0])
+                                    standoff(od,id,h);
+                        }
+                    }
+                }
+               if(len(standoffs) > 0){
+                    for(s=standoffs){
+                        if(s[5]){
+                            x=s[0];
+                            z=s[1];
+                            od=s[2];
+                            id=s[3];
+                            translate([x,0,z])
+                                rotate([270,270,0])
+                                    standoff_thru_screw(od,id);
+                        }
+                    }
+               }
+            }
         }
     }
 }
@@ -57,118 +179,6 @@ module enclosure_Dp(dim, brackets=[], standoffs=[]){
 }
 
 
-
-module enclosure_bottom_panel(depth, brackets=[], standoffs=[]){
-    inside_corner=[WALL_THICKNESS,WALL_THICKNESS,WALL_THICKNESS];
-	panel_dim=[CABINET_WIDTH, depth, WALL_THICKNESS];
-    screw_trap_size = 8;
-    screw_trap_pos = [
-        [WALL_THICKNESS,screw_trap_size+TOL,WALL_THICKNESS],
-        [screw_trap_size+TOL,WALL_THICKNESS,WALL_THICKNESS],
-        [panel_dim.x-screw_trap_size-WALL_THICKNESS,screw_trap_size+TOL,WALL_THICKNESS],
-        [panel_dim.x-2*screw_trap_size-TOL,WALL_THICKNESS,WALL_THICKNESS],
-        [WALL_THICKNESS,panel_dim.y-2*screw_trap_size,WALL_THICKNESS],
-        [screw_trap_size,panel_dim.y-WALL_THICKNESS-screw_trap_size,WALL_THICKNESS],
-        [panel_dim.x-screw_trap_size-WALL_THICKNESS,panel_dim.y-2*screw_trap_size,WALL_THICKNESS],
-        [panel_dim.x-screw_trap_size*2,panel_dim.y-screw_trap_size-WALL_THICKNESS,WALL_THICKNESS]
-    ];
-    screw_pos = [
-        screw_trap_pos[0] + screw_trap_size*[0,0.5,0.5],
-        screw_trap_pos[1] + screw_trap_size*[0.5,0,0.5],
-        screw_trap_pos[2] + screw_trap_size*[1,0.5,0.5],
-        screw_trap_pos[3] + screw_trap_size*[0.5,0,0.5],
-        screw_trap_pos[4] + screw_trap_size*[0,0.5,0.5],
-        screw_trap_pos[5] + screw_trap_size*[0.5,1,0.5],
-        screw_trap_pos[6] + screw_trap_size*[1,0.5,0.5],
-        screw_trap_pos[7] + screw_trap_size*[0.5,1,0.5]
-    ];
-    screw_rot = [
-        90*[0,1,0],
-        90*[3,0,0],
-        90*[0,3,0],
-        90*[3,0,0],
-        90*[0,1,0],
-        90*[1,0,0],
-        90*[0,3,0],
-        90*[1,0,0]
-    ];
-    
-    difference(){
-        union(){
-            cube(panel_dim);
-            for(i=screw_trap_pos){
-                translate(i)cube(screw_trap_size);
-            }
-            if(len(brackets) > 0){
-                for(b=brackets){
-                    x = b[0];
-                    y = b[1];
-                    w = b[2];
-                    l = b[3];
-                    h = b[4];
-                    xl= b[5];
-                    yl= b[6];
-                    translate(inside_corner + [x,y,0])
-                        bracket(w,l,xl,yl,h);
-                }
-            }
-            if(len(standoffs) >0){
-                for(s=standoffs){
-                    x=s[0];
-                    y=s[1];
-                    od=s[2];
-                    id=s[3];
-                    h=s[4];
-                    translate(inside_corner + [x,y,0])
-                        standoff(od,id,h);
-                }
-            }
-        }
-        cabinet_vents(panel_dim.y);
-        translate([screw_trap_size/2,screw_trap_size/2,M3_CS_SCREW_HEAD_HEIGHT])
-            rotate([180,0,0])
-                m3_cs_screw();
-        translate([panel_dim.x-screw_trap_size/2,screw_trap_size/2,M3_CS_SCREW_HEAD_HEIGHT])
-            rotate([180,0,0])
-                m3_cs_screw();
-        translate([panel_dim.x-screw_trap_size/2,panel_dim.y-screw_trap_size/2,M3_CS_SCREW_HEAD_HEIGHT])
-            rotate([180,0,0])
-                m3_cs_screw();
-        translate([screw_trap_size/2,panel_dim.y-screw_trap_size/2,M3_CS_SCREW_HEAD_HEIGHT])
-            rotate([180,0,0])
-                m3_cs_screw();
-        translate([panel_dim.x/2,screw_trap_size/2,M3_CS_SCREW_HEAD_HEIGHT])
-            rotate([180,0,0])
-                m3_cs_screw();
-        translate([panel_dim.x-screw_trap_size/2,panel_dim.y/2,M3_CS_SCREW_HEAD_HEIGHT])
-            rotate([180,0,0])
-                m3_cs_screw();
-        translate([panel_dim.x/2,panel_dim.y-screw_trap_size/2,M3_CS_SCREW_HEAD_HEIGHT])
-            rotate([180,0,0])
-                m3_cs_screw();
-        translate([screw_trap_size/2,panel_dim.y/2,M3_CS_SCREW_HEAD_HEIGHT])
-            rotate([180,0,0])
-                m3_cs_screw();
-        for(i=[0:7]){
-            translate(screw_pos[i])
-                rotate(screw_rot[i])
-                    cylinder(d=M3_SCREW_THREAD-TOL,h=M3_SCREW_LENGTH);
-        }
-        if(len(standoffs) > 0){
-            for(s=standoffs){
-                x=s[0];
-                y=s[1];
-                od=s[2];
-                id=s[3];
-                enabled=s[5];
-                if(enabled){
-                    translate(inside_corner + [x,y,-WALL_THICKNESS])standoff_thru_screw(od,id);
-                }
-            }
-        }
-    }
-}
-
 $fn=20;
 dim = [CABINET_WIDTH,110,u2mm(5)];
 explode_up = [0,0,1];
@@ -177,8 +187,10 @@ explode_backward = [0,1,0];
 explode_forward = [0,-1,0];
 explode_left = [-1,0,0];
 explode_right = [1,0,0];
-explode_distance=20;
+explode_distance=10;
 
+//rotate([270,270,0])bracket([10,10,10],2,5);
+//rotate([90,0,0])bracket([10,10,10],2,5);
 translate(explode_backward*explode_distance)enclosure_Np(dim);
 translate(explode_forward*explode_distance)enclosure_Sp(dim);
 translate(explode_right*explode_distance)enclosure_Ep(dim);

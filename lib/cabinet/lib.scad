@@ -1,7 +1,12 @@
 include <../base/constants.scad>
 include <../base/common.scad>
+//TODO: Refactor this library to use a similar procedure that is used for creating enclosures. 
 
+module cabinet_refactor(dim=[0,0,0],brackets=[],stasndoffs=[], rear_panel_type="default"){
+    $fn=60;
+    
 
+}
 //calculates the inside corners of the cabinet
 function calculate_inside_corners(w, d, h)=[
 	[ WALL_THICKNESS, 0, WALL_THICKNESS],	//  0: Front lower left
