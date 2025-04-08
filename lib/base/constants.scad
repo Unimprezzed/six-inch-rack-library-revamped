@@ -1,4 +1,4 @@
-SIX_INCH = 155;	
+SIX_INCH = 155;	                                        //Per the original design, the front plate is 15.5cm
 PANEL_WIDTH = SIX_INCH + 1;					            // 6" to cm
 EXTRUSION_PROFILE_WIDTH = 20;				           	//Width of the 2020 extrusion (mm)
 HALF_EXTRUSION_PROFILE_WIDTH=EXTRUSION_PROFILE_WIDTH/2;
@@ -9,11 +9,11 @@ HEIGHT_CS_THRESHOLD=70; //Minimum height where we will add additional holes to t
 
 //Wall and panel 
 WALL_THICKNESS = 2;										//Thickness of the walls (mm)
-PANEL_THICKNESS = 3; 									//Thickness of panels (mm)
+PANEL_THICKNESS = 3.3; 									//Thickness of panels (mm)
 
 //Screw parameters
-M3_CS_SCREW_HEAD_WIDTH = 6;								//Width of a counter-sunk M3 screw (mm)
-M3_CS_SCREW_HEAD_HEIGHT = 1.1; 							//Height of a counter-sunk M3 screw (mm)
+M3_CS_SCREW_HEAD_WIDTH = 7;								//Width of a counter-sunk M3 screw (mm) + clearence
+M3_CS_SCREW_HEAD_HEIGHT = 1.4; 							//Height of a counter-sunk M3 screw (mm) + clearence
 M3_SCREW_THREAD = 3.0;									//The diameter of an M3 screw (mm)
 M3_SCREW_LENGTH = 7.0;									//The maximum length of an M3 screw used in this project
 M4_SCREW_HEAD_WIDTH = 7; 								//

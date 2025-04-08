@@ -156,34 +156,36 @@ module grid(){
         translate([15,15,-1]){cube([125,125,10]);}
     }
 }
-
 //Handle design common to the major modules in this ecosystem.  
 module handle(units){
-    h1 = u2mm(units);
+    cabinet_h = u2mm(units);
     outer_r = 4.5;
     inner_r = outer_r/2;
-    h2 = h1-4*inner_r;
-    translate([0,0,0]){
-        difference(){
-            handle_sub(outer_r,h1,10);
-            translate([outer_r, 0,-2])handle_sub(inner_r,h2,12);
-            translate([inner_r,0,5])rotate([90,0,0])cylinder(h=M3_SCREW_LENGTH,d=M3_SCREW_THREAD-TOL,$fn=20);
-            translate([h1-inner_r,0,5])rotate([90,0,0])cylinder(h=M3_SCREW_LENGTH,d=M3_SCREW_THREAD-TOL,$fn=20);
-        }
-    }
-}
-
-//A sub-module of the above that creates the basic shape of the handle
-module handle_sub(outer_r,l,h){
-    hull(){
-            translate([outer_r,-outer_r,0])cylinder(r=outer_r,h=h);
-            translate([l-outer_r,-outer_r,0])cylinder(r=outer_r,h=h);
-            translate([0,-outer_r,0])cube([l,outer_r,h]);
+    difference(){
+        translate([outer_r,0,0])
+            hull(){
+                translate([-outer_r,0,outer_r])
+                    sphere(r=outer_r,$fn=32);
+                translate([-outer_r,0,cabinet_h-outer_r])
+                    sphere(r=outer_r,$fn=32);
+                translate([-outer_r,0,outer_r])
+                    rotate([0,90,90])
+                        cylinder(r=outer_r,h=2*outer_r-2,$fn=32);
+                translate([-outer_r,0,cabinet_h-outer_r])
+                    rotate([0,90,90])
+                        cylinder(r=outer_r,h=2*outer_r-2,$fn=32);
+            }
+        translate([0,0,outer_r])
+            rotate([270,0,0])
+                cylinder(h=M3_SCREW_LENGTH,d=M3_SCREW_THREAD-TOL,$fn=20);
+        translate([0,0,cabinet_h-outer_r])
+            rotate([270,0,0])
+                cylinder(h=M3_SCREW_LENGTH,d=M3_SCREW_THREAD-TOL,$fn=20);
+        
     }
 }
 
 //Module taken from the original library that creates a piece that has similiar dimensions to a 2020 aluminum extrusion.
-//Last variables 
 module extrusion(length_mm, screw_trap_center=false, screw_traps_x=false, screw_traps_y=false){
 	difference(){
 		translate([0,2,2])
@@ -245,15 +247,15 @@ module rack_panel(dim=[0,0,0]){
 	 mounting_screw_pos = [
 		[-HALF_EXTRUSION_PROFILE_WIDTH, -PANEL_THICKNESS,U/2],
 		[-HALF_EXTRUSION_PROFILE_WIDTH, -PANEL_THICKNESS, dim.z-U/2],
-		[SIX_INCH-(EXTRUSION_PROFILE_WIDTH*1.5),-PANEL_THICKNESS,U/2],
-		[SIX_INCH-(EXTRUSION_PROFILE_WIDTH*1.5),-PANEL_THICKNESS,dim.z-U/2],
+		[dim.x + HALF_EXTRUSION_PROFILE_WIDTH,-PANEL_THICKNESS,U/2],
+		[dim.x + HALF_EXTRUSION_PROFILE_WIDTH,-PANEL_THICKNESS,dim.z-U/2],
         [-HALF_EXTRUSION_PROFILE_WIDTH,-PANEL_THICKNESS,dim.z/2],
-        [SIX_INCH-(EXTRUSION_PROFILE_WIDTH*1.5),-PANEL_THICKNESS,dim.z/2]
+        [dim.x + HALF_EXTRUSION_PROFILE_WIDTH,-PANEL_THICKNESS,dim.z/2]
 	];
 	difference(){
 		translate([-EXTRUSION_PROFILE_WIDTH+1.25,-PANEL_THICKNESS+1.25,1.25])
 			minkowski(){
-				cube([SIX_INCH-2.5,PANEL_THICKNESS-2.5,dim.z-2.5]);
+				cube([dim.x+2*EXTRUSION_PROFILE_WIDTH-2.5,PANEL_THICKNESS-2.5,dim.z-2.5]);
 				sphere(r=1.25);
 			}
 		for(i=[0:mm2u(dim.z) >=5 ? 5: 3]){

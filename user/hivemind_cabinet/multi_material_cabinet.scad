@@ -25,9 +25,9 @@ s_y3 = rpi_y;
 s_x4 = rpi_x + 49;
 s_y4 = rpi_y + 58;
 OLED_window_w = 41*1; 
-OLED_window_h = 12*1;
+OLED_window_h = 13*1;
 OLED_screen_w = 32.5*1; 
-OLED_screen_h = 12*1; 
+OLED_screen_h = 13*1; 
 partNumber = 4;
 standoffs = [
     [s_x1, s_y1, 6, 2.5, 3, true],
@@ -102,9 +102,8 @@ module make_mm_part(part_id, units, depth, brackets=[],standoffs=[],square_holes
                 linear_extrude(cabinet_dim.z)
                     hex_grid_shell(10,1,6,23);
                     
-            translate([-4+CABINET_WIDTH/2,23,0])cube([OLED_window_w, OLED_window_h,1]);
-            translate([CABINET_WIDTH/2,23,1])cube([OLED_screen_w, OLED_screen_h,2]);
-            
+            translate([-4+CABINET_WIDTH/2,23,0])cube([OLED_window_w, OLED_window_h,2.7]);
+            translate([CABINET_WIDTH/2,23,1])cube([OLED_screen_w, OLED_screen_h,PANEL_THICKNESS]);
         }
     }    
     //Front panel cutout 1 
@@ -114,13 +113,14 @@ module make_mm_part(part_id, units, depth, brackets=[],standoffs=[],square_holes
             rotate([270,0,0])
                 cabinet_front_panel(cabinet_dim,square_holes, circular_holes);
                 
-            translate([-4+CABINET_WIDTH/2,23,0])cube([OLED_window_w, OLED_window_h,1]);
-            translate([CABINET_WIDTH/2,23,1])cube([OLED_screen_w, OLED_screen_h,2]);
-            
+            //translate([-4+CABINET_WIDTH/2,23,0])cube([OLED_window_w, OLED_window_h,2.7]);
+           // translate([CABINET_WIDTH/2,23,1])cube([OLED_screen_w, OLED_screen_h,PANEL_THICKNESS]);
             }
+                
                 translate([-EXTRUSION_PROFILE_WIDTH+2.5,2.5,-10])
                     linear_extrude(cabinet_dim.z)
                         hex_grid_shell(10,1,6,23);
+                
         }
     }    
     //Base rear panel

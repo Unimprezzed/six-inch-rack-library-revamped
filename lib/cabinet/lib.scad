@@ -2,11 +2,57 @@ include <../base/constants.scad>
 include <../base/common.scad>
 //TODO: Refactor this library to use a similar procedure that is used for creating enclosures. 
 
-module cabinet_refactor(dim=[0,0,0],brackets=[],stasndoffs=[], rear_panel_type="default"){
+module cabinet_v2(dim=[0,0,0],brackets=[],stasndoffs=[], rear_panel_type="default"){
     $fn=60;
     
-
+    front_screw_trap_pos = [
+        [SCREW_TRAP_DISTANCE,0,0],
+        [dim.x-WALL_THICKNESS-SCREW_TRAP_DISTANCE,0,0],
+        [0,0,dim.z/2],
+        [dim.x-2*WALL_THICKNESS,0,dim.z/2]
+    ];
+    top_screw_trap_pos = [
+        [0,SCREW_TRAP_OUTER_DIAMETER/2,dim.z-2*(WALL_THICKNESS+TOL)], //Front
+        [dim.x-2*WALL_THICKNESS,SCREW_TRAP_OUTER_DIAMETER/2,dim.z-2*(WALL_THICKNESS+TOL)],
+        [0,dim.y-SCREW_TRAP_OUTER_DIAMETER/2-2*(WALL_THICKNESS+TOL),dim.z-2*(WALL_THICKNESS+TOL)], //Back
+        [dim.x-2*WALL_THICKNESS,dim.y-SCREW_TRAP_OUTER_DIAMETER/2-2*(WALL_THICKNESS+TOL),dim.z-2*(WALL_THICKNESS+TOL)],
+        [0,dim.y/2,dim.z-2*(WALL_THICKNESS+TOL)], //Middepth
+        [dim.x-2*WALL_THICKNESS,dim.y/2,dim.z-2*(WALL_THICKNESS+TOL)]
+    ];
+    back_screw_trap_pos=[
+        [SCREW_TRAP_DISTANCE,dim.y-2*(WALL_THICKNESS+TOL),0],
+        [dim.x-WALL_THICKNESS-SCREW_TRAP_DISTANCE,dim.y-2*(WALL_THICKNESS+TOL),0],
+        [0,dim.y-2*(WALL_THICKNESS+TOL),dim.z/2],
+        [dim.x-2*WALL_THICKNESS,dim.y-2*(WALL_THICKNESS+TOL),dim.z/2]
+    ];
+    
+    //Generate the geometry
+    difference(){
+        translate([-WALL_THICKNESS,0,-WALL_THICKNESS])cube(dim);
+        translate([0,-1,0])cube(dim+[-2*WALL_THICKNESS,2,1]);
+    }
+    
+    for(i=front_screw_trap_pos){
+        color("white")
+            translate(i)
+                sphere(d=SCREW_TRAP_OUTER_DIAMETER);
+    }
+    for(i=top_screw_trap_pos){
+        color("red")
+            translate(i)
+                sphere(d=SCREW_TRAP_OUTER_DIAMETER);
+    }
+    for(i=back_screw_trap_pos){
+        color("blue")
+            translate(i)
+                sphere(d=SCREW_TRAP_OUTER_DIAMETER);
+    }
+    
+        
+                
 }
+//cabinet_v2(dim=[CABINET_WIDTH, 120, u2mm(3)]);
+
 //calculates the inside corners of the cabinet
 function calculate_inside_corners(w, d, h)=[
 	[ WALL_THICKNESS, 0, WALL_THICKNESS],	//  0: Front lower left
@@ -363,12 +409,12 @@ module cabinet_front_panel(cabinet_dim=[0,0,0],square_cutouts=[], circular_cutou
         [cabinet_dim.x+2,-M3_CS_SCREW_HEAD_HEIGHT,cabinet_dim.z-4.5]
     ];
     cabinet_screws_pos = [
-        ic[0] + [SCREW_TRAP_DISTANCE,-WALL_THICKNESS,SCREW_TRAP_OUTER_DIAMETER*0.2],
-        ic[1] + [-SCREW_TRAP_DISTANCE,-WALL_THICKNESS,SCREW_TRAP_OUTER_DIAMETER*0.2],
-        ic[0] + [SCREW_TRAP_DISTANCE,-WALL_THICKNESS,cabinet_dim.z-2*WALL_THICKNESS-SCREW_TRAP_OUTER_DIAMETER*0.2],
-        ic[1] + [-SCREW_TRAP_DISTANCE,-WALL_THICKNESS,cabinet_dim.z-2*WALL_THICKNESS-SCREW_TRAP_OUTER_DIAMETER*0.2],
-        ic[6] + [SCREW_TRAP_OUTER_DIAMETER*0.2,-WALL_THICKNESS,0],
-        ic[7] + [-SCREW_TRAP_OUTER_DIAMETER*0.2,-WALL_THICKNESS,0]
+        ic[0] + [SCREW_TRAP_DISTANCE,-PANEL_THICKNESS+M3_CS_SCREW_HEAD_HEIGHT,SCREW_TRAP_OUTER_DIAMETER*0.2],
+        ic[1] + [-SCREW_TRAP_DISTANCE,-PANEL_THICKNESS+M3_CS_SCREW_HEAD_HEIGHT,SCREW_TRAP_OUTER_DIAMETER*0.2],
+        ic[0] + [SCREW_TRAP_DISTANCE,-PANEL_THICKNESS+M3_CS_SCREW_HEAD_HEIGHT,cabinet_dim.z-2*WALL_THICKNESS-SCREW_TRAP_OUTER_DIAMETER*0.2],
+        ic[1] + [-SCREW_TRAP_DISTANCE,-PANEL_THICKNESS+M3_CS_SCREW_HEAD_HEIGHT,cabinet_dim.z-2*WALL_THICKNESS-SCREW_TRAP_OUTER_DIAMETER*0.2],
+        ic[6] + [SCREW_TRAP_OUTER_DIAMETER*0.2,-PANEL_THICKNESS+M3_CS_SCREW_HEAD_HEIGHT,0],
+        ic[7] + [-SCREW_TRAP_OUTER_DIAMETER*0.2,-PANEL_THICKNESS+M3_CS_SCREW_HEAD_HEIGHT,0]
     ];
     
     difference(){

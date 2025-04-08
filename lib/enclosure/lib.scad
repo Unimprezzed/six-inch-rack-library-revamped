@@ -71,7 +71,7 @@ module enclosure_Np(dim,square_cutouts=[], circular_cutouts=[], brackets=[], sta
     }
 }
 module enclosure_Sp(dim,square_cutouts=[], circular_cutouts=[], brackets=[], standoffs=[]){
-    panel_dim=[dim.x+2*EXTRUSION_PROFILE_WIDTH,PANEL_THICKNESS,dim.z];
+    panel_dim=[dim.x,PANEL_THICKNESS,dim.z];
     translate([-0,0,-WALL_THICKNESS]){
         color("blue",0.5){            
             difference(){
@@ -105,7 +105,7 @@ module enclosure_Sp(dim,square_cutouts=[], circular_cutouts=[], brackets=[], sta
                             length=b[4];
                             tabs=b[5];
                             translate([x,0,z])
-                                rotate([270,270,0])
+                                rotate([270,0,0])
                                     bracket(dim, thickness,length, tabs);
                         }
                     }
@@ -117,7 +117,7 @@ module enclosure_Sp(dim,square_cutouts=[], circular_cutouts=[], brackets=[], sta
                             id=s[3];
                             h=s[4];
                             translate([x,0,z])
-                                rotate([270,270,0])
+                                rotate([270,0,0])
                                     standoff(od,id,h);
                         }
                     }
@@ -130,7 +130,7 @@ module enclosure_Sp(dim,square_cutouts=[], circular_cutouts=[], brackets=[], sta
                             od=s[2];
                             id=s[3];
                             translate([x,0,z])
-                                rotate([270,270,0])
+                                rotate([270,0,0])
                                     standoff_thru_screw(od,id);
                         }
                     }
@@ -180,20 +180,21 @@ module enclosure_Dp(dim, brackets=[], standoffs=[]){
 
 
 $fn=20;
-dim = [CABINET_WIDTH,110,u2mm(5)];
+dim = [CABINET_WIDTH,CABINET_WIDTH,u2mm(7)];
 explode_up = [0,0,1];
 explode_down = [0,0,-1];
 explode_backward = [0,1,0];
 explode_forward = [0,-1,0];
 explode_left = [-1,0,0];
 explode_right = [1,0,0];
-explode_distance=10;
+explode_distance=1;
 
-//rotate([270,270,0])bracket([10,10,10],2,5);
-//rotate([90,0,0])bracket([10,10,10],2,5);
-translate(explode_backward*explode_distance)enclosure_Np(dim);
-translate(explode_forward*explode_distance)enclosure_Sp(dim);
-translate(explode_right*explode_distance)enclosure_Ep(dim);
-translate(explode_left*explode_distance)enclosure_Wp(dim);
-translate(explode_up*explode_distance)enclosure_Up(dim);
-translate(explode_down*explode_distance)enclosure_Dp(dim);
+
+brackets = [];//[[CABINET_WIDTH-40,100,[26,68,16.3],3,5,[false,true,false,true]]];
+standoffs = [for(i=[0:4]) [5 + i*CABINET_WIDTH/5, 5 + i*u2mm(7)/5, 5,2,5]];
+translate(explode_backward*explode_distance)enclosure_Np(dim, brackets=brackets, standoffs=standoffs);
+translate(explode_forward*explode_distance)enclosure_Sp(dim, brackets=brackets, standoffs=standoffs);
+translate(explode_right*explode_distance)enclosure_Ep(dim, brackets=brackets, standoffs=standoffs);
+translate(explode_left*explode_distance)enclosure_Wp(dim, brackets=brackets, standoffs=standoffs);
+translate(explode_up*explode_distance)enclosure_Up(dim, brackets=brackets, standoffs=standoffs);
+translate(explode_down*explode_distance)enclosure_Dp(dim, brackets=brackets, standoffs=standoffs);

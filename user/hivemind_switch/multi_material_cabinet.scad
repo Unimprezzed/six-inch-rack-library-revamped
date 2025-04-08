@@ -2,20 +2,36 @@ include <../../lib/six-inch.scad>
 include <../../external/hex-grid/hex-grid.scad>             //hexagon grid library
 
 
-switch_dimensions = [101,101,25.4];
-brackets=[[4.7,47.8,switch_dimensions,2,10,[false,true,true,true]]];
+switch_dimensions = [100,100,25.4+WALL_THICKNESS];
+brackets=[[5.7,50.8,switch_dimensions,3,7,[false,true,true,true]]];
+standoffs=[
+    [11.7,56.8,6,0,WALL_THICKNESS,false],
+    [11.7,100.8,6,0,WALL_THICKNESS,false],
+    [11.7,144.8,6,0,WALL_THICKNESS,false],
+    [33.7,78.8,6,0,WALL_THICKNESS,false],
+    [33.7,122.8,6,0,WALL_THICKNESS,false],
+    [55.7,56.8,6,0,WALL_THICKNESS,false],
+    [55.7,100.8,6,0,WALL_THICKNESS,false],
+    [55.7,144.8,6,0,WALL_THICKNESS,false],
+    [77.7,78.8,6,0,WALL_THICKNESS,false],
+    [77.7,122.8,6,0,WALL_THICKNESS,false],
+    [99.7,56.8,6,0,WALL_THICKNESS,false],
+    [99.7,100.8,6,0,WALL_THICKNESS,false],
+    [99.7,144.8,6,0,WALL_THICKNESS,false]
+];
 square_holes=[];
 circular_holes=[];
 units = 3*1; 
 depth = SIX_INCH*1;
-partNumber = 1;
+partNumber = 0;
 
-module make_mm_part(part_id, units, depth, brackets=[],square_holes=[], circular_holes=[]){
+module make_mm_part(part_id, units, depth, brackets=[],square_holes=[], circular_holes=[], standoffs=[]){
     cabinet_dim = [CABINET_WIDTH, depth, u2mm(units)];
     //Base cabinet
     if(part_id == 0){
         difference(){
-            cabinet(cabinet_dim, brackets,rear_panel_type="tabs");
+            cabinet(cabinet_dim, brackets=brackets,standoffs=standoffs,rear_panel_type="tabs");
+            /*
             translate([5+WALL_THICKNESS,5,0])
                 linear_extrude(WALL_THICKNESS)
                     hex_grid_shell(10,1,20,16);
@@ -28,6 +44,7 @@ module make_mm_part(part_id, units, depth, brackets=[],square_holes=[], circular
                 rotate([0,270,0])
                     linear_extrude(WALL_THICKNESS)
                         hex_grid_shell(10,1,20,5);
+            */
        }
     }
     //Cabinet cutout 1
@@ -46,16 +63,16 @@ module make_mm_part(part_id, units, depth, brackets=[],square_holes=[], circular
                 linear_extrude(WALL_THICKNESS)
                     hex_grid_shell(10,1,20,5);
         }
-        cabinet(cabinet_dim, brackets,rear_panel_type="tabs");
+        cabinet(cabinet_dim, brackets=brackets,standoffs=standoffs,rear_panel_type="tabs");
         }
     }   
     //Base lid
     if(part_id == 2){
         difference(){
             cabinet_lid(cabinet_dim,rear_panel_type="tabs");
-            translate([5+WALL_THICKNESS,5,cabinet_dim.z-WALL_THICKNESS])
-                linear_extrude(WALL_THICKNESS)
-                    hex_grid_shell(10,1,20,16);
+            //translate([5+WALL_THICKNESS,5,cabinet_dim.z-WALL_THICKNESS])
+            //    linear_extrude(WALL_THICKNESS)
+            //        hex_grid_shell(10,1,20,16);
         }
     }
     //Lid cutout 1
@@ -122,4 +139,4 @@ module make_mm_part(part_id, units, depth, brackets=[],square_holes=[], circular
         }
     }    
 }
-make_mm_part(partNumber,units,depth,brackets=brackets,square_holes=square_holes,circular_holes=circular_holes);
+make_mm_part(partNumber,units,depth,brackets=brackets,square_holes=square_holes,circular_holes=circular_holes,standoffs=standoffs);

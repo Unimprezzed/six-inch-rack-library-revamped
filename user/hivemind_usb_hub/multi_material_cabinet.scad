@@ -2,7 +2,7 @@ include <../../lib/six-inch.scad>
 include <../../external/hex-grid/hex-grid.scad>             //hexagon grid library
 depth = 90; 
 units = 3;
-usb_hub_dim = [94,68.6,22.86];
+usb_hub_dim = [101,70,22.86];
 
 rear_panel_circular_cutouts=[
 
